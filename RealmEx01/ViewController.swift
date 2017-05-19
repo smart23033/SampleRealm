@@ -7,19 +7,39 @@
 //
 
 import UIKit
+import RealmSwift
+
+class Todo : Object {
+    dynamic var title : String!
+    dynamic var dueDate : Date!
+}
 
 class ViewController: UIViewController {
-
+    
+    var realm : Realm!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        realm = try! Realm()
+        print("home : \(NSHomeDirectory())")
+        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func viewWillAppear(_ animated: Bool) {
+        add(title: "UIKit Study", due: Date())
+        add(title: "Network Study", due: Date())
     }
-
+    
+    func add(title:String, due date : Date){
+        let todo = Todo()
+        todo.title = title
+        todo.dueDate = date
+        
+        try! realm.write {
+            realm.add(todo)
+        }
+    }
 
 }
 
